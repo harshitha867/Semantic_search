@@ -2,7 +2,8 @@ import fitz
 from chunking import chunk_text
 from embeddings import generate_embeddings
 from search import semantic_search
-
+from faiss_search import create_faiss_index
+from faiss_search import search_faiss
 
 def extract_text_from_pdf(pdf_path):
     """
@@ -39,6 +40,7 @@ if __name__ == "__main__":
 
         # Generate embeddings
         embeddings = generate_embeddings(chunks)
+        faiss_index = create_faiss_index(embeddings)
 
         print(f"\nTotal Chunks: {len(chunks)}")
 
@@ -73,6 +75,28 @@ if __name__ == "__main__":
 
             print(f"\nResult {i}")
             print(f"Similarity Score: {score:.4f}")
+
+            print("\nRetrieved Chunk:\n")
+            print(result[:500])
+
+            print("\n" + "-" * 80)
+
+        print("\n")
+        print("=" * 80)
+        print("FAISS SEARCH RESULTS")
+        print("=" * 80)
+
+        faiss_results = search_faiss(
+            query,
+            chunks,
+            faiss_index,
+            top_k=3
+        )
+
+        for i, (result, distance) in enumerate(faiss_results, start=1):
+
+            print(f"\nResult {i}")
+            print(f"Distance: {distance:.4f}")
 
             print("\nRetrieved Chunk:\n")
             print(result[:500])
