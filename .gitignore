@@ -1,0 +1,16 @@
+# Virtual Environment
+prj/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# Future folders
+uploads/
+data/
+
+# Databases
+*.db
